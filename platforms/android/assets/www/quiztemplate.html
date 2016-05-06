@@ -1,0 +1,38 @@
+<div class="quiz-area" ng-show="inProgress" >
+	<div ng-show="!quizOver">
+		<h2 id="question">{{question}}</h2>
+		<ul id="options">
+			<li ng-repeat="option in options">
+				<label>
+					<input type="radio" name="answer" value="{{$index+1}}" ng-model="LastSelectedIndex">
+					{{option}}
+				</label>
+			</li>
+		</ul>
+		<button ng-click="previousQuestion()" class="next-question">Previous</button> 
+		<button ng-click="nextQuestion()" class="next-question">Next(save ans)</button>
+	</div>
+ 
+	<div ng-show="quizOver">
+		<h2>Quiz is over</h2>
+		<button ng-click="reset()">Play again</button>
+		
+		<h3>your answer</h3>
+		<li ng-repeat="Response in AllResponse">
+				<label> {{Response.Qid}}</label>
+				<label> {{Response.Qans}}</label>
+			</li>
+	</div>
+ 
+	<div id="score">
+		Score: {{score}}
+	</div>
+
+</div>
+
+	
+
+<div class="intro" ng-show="!inProgress">
+	<p>Welcome to the QuizApp</p>
+	<button id="startQuiz" ng-click="start()">Start the Quiz</button>
+</div>
