@@ -3,27 +3,38 @@ quizApp.factory('quizFactory', function() {
 		{
 			question: "Which is the largest country in the world by population?",
 			options: ["India", "USA", "China", "Russia"],
-			questionId: 211
+			questionId: 211,
+			type:"r"
 		},
 		{
 			question: "When did the second world war end?",
 			options: ["1945", "1939", "1944", "1942"],
-			questionId: 220
+			questionId: 220,
+			type:"r"
 		},
 		{
 			question: "Which was the first country to issue paper currency?",
-			options: ["USA", "France", "Italy", "China"],
-			questionId: 223
+			options: ["USA", "France"],
+			questionId: 223,
+			type:"r"
 		},
 		{
 			question: "Which city hosted the 1996 Summer Olympics?",
 			options: ["Atlanta", "Sydney", "Athens", "Beijing"],
-			questionId: 210
+			questionId: 210,
+			type:"c"
 		},
 		{	
 			question: "Who invented telephone?",
 			options: ["Albert Einstein", "Alexander Graham Bell", "Isaac Newton", "Marie Curie"],
-			questionId: 212
+			questionId: 212,
+			type:"c"
+		},
+		{
+			question: "When did the second world war end?",
+			options: ["1945", "1939", "1944", "1942"],
+			questionId: 229,
+			type:"r"
 		}
 	];
 	
@@ -36,9 +47,13 @@ quizApp.factory('quizFactory', function() {
 		} else {
 			return false;
 		}
+		
+		
 	}
 	
 	var setAnswers= function(id,ans){
+		
+		alert("saveans service");
 		var response = {
 				Qid : id,
 				Qans : ans
@@ -59,18 +74,26 @@ quizApp.factory('quizFactory', function() {
 			  userResponse.push(response);
 		}
 		
+		if(typeof(Storage) !== "undefined") {
+			localStorage.removeItem("userQuizResponse");
+			localStorage.setItem("userQuizResponse", JSON.stringify(userResponse));
+		}
+		
 	}
   
 	var getAllResponse = function(){
+		userResponse = JSON.parse(localStorage.getItem("userQuizResponse"));
 		return userResponse;
 	}
 	
 	var getResponseByQuestionId = function(id){
+		userResponse = JSON.parse(localStorage.getItem("userQuizResponse"));
 		var objlist = $.grep(userResponse, function(e){ return e.Qid == id; });
 		return objlist[0];
 	}
 	var resetResponse = function(){
-		userResponse = [];
+		//userResponse = [];
+		//localStorage.removeItem("userQuizResponse");
 	}
 	
 	return {

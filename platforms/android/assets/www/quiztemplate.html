@@ -1,33 +1,36 @@
-<div class="quiz-area" ng-show="inProgress" >
+<div class="quiz-area" ng-show="inProgress" ng-swipe-right="previousQuestion()" ng-swipe-left="nextQuestion()" > 
 	<div ng-show="!quizOver">
 		<h2 id="question">{{question}}</h2>
 		<ul id="options">
-			<li ng-repeat="option in options">
+			<li ng-repeat="option in options" ng-show="typeRadio">
 				<label>
-					<input type="radio" name="answer" value="{{$index+1}}" ng-model="LastSelectedIndex">
+					<input type="radio" name="answerRadio" value="{{$index+1}}" ng-checked="checkChecked($index+1)">
+					{{option}}
+				</label>
+			</li>
+			<li ng-repeat="option in options"  ng-show="!typeRadio"> 
+				<label>
+					<input type="checkbox" name="answerCheckbox" value="{{$index+1}}" ng-checked="checkChecked($index+1)">
 					{{option}}
 				</label>
 			</li>
 		</ul>
-		<button ng-click="previousQuestion()" class="next-question">Previous</button> 
-		<button ng-click="nextQuestion()" class="next-question">Next(save ans)</button>
+		
+		<input type="number" ng-model="searchIndex" />
+		<button ng-click="goToQuestionNumber()">Go</button>
+		<button ng-click="previousQuestion()">Previous</button>
+		<button ng-click="nextQuestion()">Next</button>
 	</div>
  
 	<div ng-show="quizOver">
 		<h2>Quiz is over</h2>
 		<button ng-click="reset()">Play again</button>
-		
 		<h3>your answer</h3>
 		<li ng-repeat="Response in AllResponse">
 				<label> {{Response.Qid}}</label>
 				<label> {{Response.Qans}}</label>
 			</li>
 	</div>
- 
-	<div id="score">
-		Score: {{score}}
-	</div>
-
 </div>
 
 	
