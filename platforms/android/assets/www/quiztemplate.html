@@ -4,22 +4,22 @@
 		<ul id="options">
 			<li ng-repeat="option in options" ng-show="typeRadio">
 				<label>
-					<input type="radio" name="answerRadio" value="{{$index+1}}" ng-checked="checkChecked($index+1)">
+					<input type="radio" name="answerRadio" value="{{$index+1}}" ng-checked="checkChecked($index+1)" ng-model="foo"  ng-change="OptionClicked()"/>
 					{{option}}
 				</label>
 			</li>
 			<li ng-repeat="option in options"  ng-show="!typeRadio"> 
 				<label>
-					<input type="checkbox" name="answerCheckbox" value="{{$index+1}}" ng-checked="checkChecked($index+1)">
+					<input type="checkbox" name="answerCheckbox" value="{{$index+1}}" ng-checked="checkChecked($index+1)" ng-model="foo"  ng-change="OptionClicked()"/>
 					{{option}}
 				</label>
 			</li>
 		</ul>
 		
-		<input type="number" ng-model="searchIndex" />
-		<button ng-click="goToQuestionNumber()">Go</button>
-		<button ng-click="previousQuestion()">Previous</button>
-		<button ng-click="nextQuestion()">Next</button>
+		<input type="number" id="searchInput" ng-model="searchIndex" /> 
+		<button ng-click="goToQuestionNumber()" ng-disabled="validateSearchIndex()">Go</button>
+		<button ng-click="previousQuestion()" ng-disabled="validateOneOptionChecked()">Previous</button>
+		<button ng-click="nextQuestion()" ng-disabled="validateOneOptionChecked()">Next</button>
 	</div>
  
 	<div ng-show="quizOver">

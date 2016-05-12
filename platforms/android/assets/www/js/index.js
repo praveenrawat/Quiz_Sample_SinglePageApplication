@@ -21,9 +21,9 @@ quizApp.directive('quiz', function(quizFactory) {
 			}
  
 			scope.getQuestion = function() {
-				alert("getQuestion");
 				var q = quizFactory.getQuestion(scope.id);
 				if(q) {
+					
 					scope.quesId= q.questionId;
 					scope.question = q.question;
 					scope.options = q.options;
@@ -42,22 +42,32 @@ quizApp.directive('quiz', function(quizFactory) {
 			};
 			
 			scope.goToQuestionNumber = function(){
+				scope.saveAnswer();
 				scope.id = scope.searchIndex-1;
 				scope.getQuestion();
 			}
  
 			scope.nextQuestion = function() {
-				alert("nextQuestion");
+				if(scope.validateMandatoryQues() ){
+					return;
+				}
 				scope.saveAnswer();
 				scope.id++;
 				scope.getQuestion();
 			}
 			
+			scope.previousQuestion= function(){
+				if(scope.validateMandatoryQues() ){
+					return;
+				}
+				scope.saveAnswer();
+				scope.id--;
+				scope.getQuestion();
+			}
+			
 			scope.saveAnswer = function(){
-				alert("saveQuestion");
 				if(scope.typeRadio){
-					alert($('input[name=answerRadio]:checked').length);
-				 var ansOptionsLength=$('input[name=answerRadio]:checked').length;
+				var ansOptionsLength=$('input[name=answerRadio]:checked').length;
 				if(!ansOptionsLength) return;
 				
 				var ans="";
@@ -74,10 +84,8 @@ quizApp.directive('quiz', function(quizFactory) {
 					}
 				}
 				else{
-
 					var ansOptionsLength=$('input[name=answerCheckbox]:checked').length;
 					if(!ansOptionsLength) return;
-					
 					var ans="";
 					if(ansOptionsLength == 1){
 						ans = $('input[name=answerCheckbox]:checked').val();
@@ -95,15 +103,35 @@ quizApp.directive('quiz', function(quizFactory) {
 				
 				quizFactory.setAnswers(scope.quesId,ans);
 			}
-			scope.previousQuestion= function(){
-				alert("preiousQuestion");
-				scope.saveAnswer();
-				scope.id--;
-				scope.getQuestion();
+			
+			
+			scope.validateMandatoryQues = function(){
+				if(scope.typeRadio){
+					var ansOptionsLength=$('input[name=answerRadio]:checked').length;
+					if(!ansOptionsLength) return true;
+				}else{
+					var ansOptionsLength=$('input[name=answerCheckbox]:checked').length;
+					if(!ansOptionsLength) return true;
+				}
+				return false;
+			}
+			
+			
+			scope.validateSearchIndex = function(){
+				if(scope.searchIndex  == null){
+					return true;
+				}
+			}
+			
+			
+			scope.OptionClicked= function(){   // on checked change of radio or checkbox, update validateOneFlag to enable -disable botton
+				scope.validateOneFlag=scope.validateMandatoryQues();
+			}
+			scope.validateOneOptionChecked = function(){   //exp to enable-disable button
+				return scope.validateOneFlag;
 			}
 			
 			scope.checkChecked = function(index){
-				alert("checked");
 				var lastQuesAns = quizFactory.getResponseByQuestionId(scope.quesId);
 				if(lastQuesAns!=undefined && lastQuesAns!=null){
 				if(lastQuesAns.Qans!=""){
@@ -151,7 +179,6 @@ var app = {
     },
     
     onDeviceReady: function() {
-    	//alert("Device ready");
     	angular.element(document).ready(function() {
 		    angular.bootstrap(document, ['quizApp']);
 		});

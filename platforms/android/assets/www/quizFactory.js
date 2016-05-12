@@ -52,11 +52,14 @@ quizApp.factory('quizFactory', function() {
 	}
 	
 	var setAnswers= function(id,ans){
-		
-		alert("saveans service");
 		var response = {
 				Qid : id,
 				Qans : ans
+		}
+		if(localStorage.getItem("userQuizResponse") !="" && localStorage.getItem("userQuizResponse") != null){
+			userResponse = JSON.parse(localStorage.getItem("userQuizResponse"));
+		}else{
+			userResponse = [];
 		}
 		var objlist = $.grep(userResponse, function(e){ return e.Qid == id; });
 		if(objlist.length<1){
@@ -72,8 +75,8 @@ quizApp.factory('quizFactory', function() {
 			  
 			  userResponse.splice(index,1);
 			  userResponse.push(response);
+			 
 		}
-		
 		if(typeof(Storage) !== "undefined") {
 			localStorage.removeItem("userQuizResponse");
 			localStorage.setItem("userQuizResponse", JSON.stringify(userResponse));
